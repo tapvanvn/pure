@@ -652,6 +652,32 @@ var Task = Class.extend("ClassTask", {
     }
 });
 
+var TaskResourceLoad = Task.extend("ClassTaskResourceLoad", {
+    init: function(res_def) {
+        this.base();
+        this.Param = { url: "", type: "" };
+        if (res_def) {
+            if (res_def.url) {
+                this.Param.url = res_def.url;
+            }
+            if (res_def.type) {
+                this.Param.type = res_def.type;
+            }
+        }
+        this.fn = function(task, param) {
+            var callback = new Callback({
+                context: task,
+                data: param,
+                fn: function(data) {
+                    //this is task
+                    this.onDone.callDo(this.result);
+                }
+            });
+            Pure.resource.load(param.url, param.type, callback);
+        };
+    }
+});
+
 var _task_queue_id = 0;
 
 var TaskQueue = Class.extend("ClassTaskQueue", {
