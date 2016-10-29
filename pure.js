@@ -936,6 +936,16 @@ var gObject = Class.extend("ClassGuiObject", {
             actor = actor.parentNode;
         }
         return null;
+    },
+    findParentWithType:function (type)
+    {
+        var p = this;
+        while(p instanceof gObject)
+        {
+            if(p instanceof type) return p;
+            p = p.parent;
+        }
+        return null;
     }
 });
 
