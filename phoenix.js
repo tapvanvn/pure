@@ -164,8 +164,6 @@ var AppCanvas = gObject.extend("ClassAppCanvas", {
     }
 });
 
-
-
 var Phoenix = gObject.extend("ClassPhoenix", {
     init: function(parent, id) {
         if (parent instanceof gObject) {

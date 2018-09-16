@@ -1028,3 +1028,57 @@ var Textarea = gObject.extend("ClassTextarea", {
         this.dom.value = text;
     }
 });
+
+var __pure__ = window.__pure__ = {
+    TriggerManager: new TriggerManager(),
+    onTrigger:function(trigger_name, evt_handle)
+    {
+        this.TriggerManager.bind(trigger_name, evt_handle);
+    },
+
+    trigger: function(trigger_name, evt)
+    {
+        this.TriggerManager.trigger(trigger_name, evt);
+    }
+};
+
+//auto execute waiting functions after load. 
+if(typeof(window.__pure__waiting__fn) !== undefined)
+{
+    window.__pure__waiting__fn.push = function(e) {
+        if(typeof e == 'function'){
+            try{
+                e();
+            }
+            catch(ex){
+    
+            }
+        };
+    };
+    if(typeof(window.__pure__waiting__fn.forEach) !== undefined){
+        window.__pure__waiting__fn.forEach(function(fn){
+            if(typeof fn == 'function'){
+                try{
+                    fn();
+                }
+                catch(ex){
+                    console.log(ex);
+                }
+            };
+        });
+    }
+}
+else {
+    window.__pure__waiting__fn = [];
+    window.__pure__waiting__fn.push = function(e) {
+        if(typeof e == 'function'){
+            try{
+                e();
+            }
+            catch(ex){
+                console.log(ex);
+            }
+        };
+    };
+}
+
