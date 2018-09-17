@@ -1043,7 +1043,7 @@ var __pure__ = window.__pure__ = {
 };
 
 //auto execute waiting functions after load. 
-if(typeof(window.__pure__waiting__fn) !== undefined)
+if(typeof(window.__pure__waiting__fn) !== 'undefined')
 {
     window.__pure__waiting__fn.push = function(e) {
         if(typeof e == 'function'){
@@ -1055,7 +1055,7 @@ if(typeof(window.__pure__waiting__fn) !== undefined)
             }
         };
     };
-    if(typeof(window.__pure__waiting__fn.forEach) !== undefined){
+    if(typeof(window.__pure__waiting__fn.forEach) !== 'undefined'){
         window.__pure__waiting__fn.forEach(function(fn){
             if(typeof fn == 'function'){
                 try{
