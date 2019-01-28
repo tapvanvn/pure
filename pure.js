@@ -634,14 +634,13 @@ var Delegate = Class.extend("ClassDelegate", {
 });
 
 var _task_id = 0;
-//Task for execute something
+//Task for executing something
 var Task = Class.extend("ClassTask", {
     fn: function() {},
     Context: this,
     Param: null,
     onDone: null,
     init: function() {
-        //this.super();
         this._id = _task_id++;
         this.onDone = new Delegate();
     },
@@ -715,6 +714,7 @@ var TaskQueue = Class.extend("ClassTaskQueue", {
         return this._queue.length;
     }
 });
+
 var Dimension = Class.extend("ClassDimension", {
     init: function(def) {
         this._current_state = "normal";
@@ -750,12 +750,17 @@ var Dimension = Class.extend("ClassDimension", {
             if (trigger_def && trigger_def.name) {
                 this.Name = trigger_def.name;
             }
+            this._fired = 0;
             this.onTrigger = new Delegate();
         },
         callTrigger: function(evt) {
+            this._fired ++;
             if (this.onTrigger) {
                 this.onTrigger.callDo(evt);
             }
+        },
+        fired:function(){
+            return this._fired;
         }
     });
 
@@ -774,9 +779,13 @@ var Dimension = Class.extend("ClassDimension", {
             }
         },
         trigger: function(trigger_name, evt) {
-            if (this._triggers[trigger_name]) {
-                this._triggers[trigger_name].callTrigger(evt);
+            if (!this._triggers[trigger_name]) {
+                this.add(new Trigger({name:trigger_name}));
             }
+            this._triggers[trigger_name].callTrigger(evt);
+        },
+        triggerFired: function(trigger_name){
+            return this._triggers[trigger_name] ? this._triggers[trigger_name].fired() : -1;
         },
         bind: function(trigger_name, evt_handle) {
             if (!(evt_handle instanceof EventHandle)) return;
@@ -1029,6 +1038,7 @@ var Textarea = gObject.extend("ClassTextarea", {
     }
 });
 
+//RUNTIME
 var __pure__ = window.__pure__ = {
     TriggerManager: new TriggerManager(),
     onTrigger:function(trigger_name, evt_handle)
@@ -1039,6 +1049,10 @@ var __pure__ = window.__pure__ = {
     trigger: function(trigger_name, evt)
     {
         this.TriggerManager.trigger(trigger_name, evt);
+    },
+    triggerFired:function(trigger_name)
+    {
+        return this.TriggerManager.triggerFired(trigger_name);
     }
 };
 
