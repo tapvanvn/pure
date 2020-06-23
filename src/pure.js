@@ -486,6 +486,11 @@ var Pure = {
             return { 'w': width, 'h': height };
         },
 
+        hasStyle: function(dom, style) {
+            var class_name = dom.className ? dom.className.toString() : "";
+            return class_name.indexOf(' ' + style + ' ') >= 0;
+        },
+
         bindStyle: function(dom, style) {
             var class_name = dom.className ? dom.className.toString() : "";
             if (class_name.indexOf(' ' + Pure.string.trim(style) + ' ') < 0) {
@@ -500,7 +505,7 @@ var Pure = {
                 dom.className = class_name.replace(Pure.string.trim(style), '').replace('  ', ' ');
             }
         },
-        
+
         requestFullScreen: function() {
             var element = document.body;
             if (element.requestFullscreen) {
