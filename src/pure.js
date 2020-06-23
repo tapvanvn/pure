@@ -312,7 +312,7 @@ var Pure = {
                     })(fname, feature[fname]) : feature[fname];
             }
         }
-        child.extend = arguments.callee;
+        child.extend = Pure.extend;
         return child;
     },
 
@@ -391,7 +391,7 @@ var Pure = {
             var mX, mY;
             if (Pure.browser._bIE) {
                 mX = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-                mY = event.clientY + document.body.scrollTop + +document.documentElement.scrollTop;
+                mY = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
             } else {
                 mX = evt.pageX;
                 mY = evt.pageY;
@@ -471,9 +471,11 @@ var Pure = {
         getSize: function(element) {
             var width = 0;
             var height = 0;
+
             if (element.clientWidth) {
                 width = element.clientWidth;
                 height = element.clientHeight;
+
             } else if (element.offsetWidth) {
                 width = element.offsetWidth;
                 height = element.offsetHeight;
@@ -812,6 +814,7 @@ var gObject = Class.extend("ClassGuiObject", {
         //console.log("here gObject");
         this._id = gObject.prototype._gen_id++;
         this.dimension = new Dimension();
+        
         if (Pure.isNull(gAttr)) {
             gAttr = {
                 dtype: "div"
@@ -828,8 +831,10 @@ var gObject = Class.extend("ClassGuiObject", {
                 this.dimension.addState({ name: dname, dimension: gAttr.dimensions[dname] });
             }
         }
+
         this.dom = document.createElement(gAttr.dtype);
         Pure.copyAttr(this.dom, gAttr);
+
         this.dom.gParent = this;
         this.parent = null;
         if (gAttr.css) {
@@ -848,17 +853,17 @@ var gObject = Class.extend("ClassGuiObject", {
             for (var property in gAttr.style)
                 this.dom.style[property] = gAttr.style[property];
         }
+
     },
     getDom: function() {
         return this.dom;
     },
     align: function() {
         var dimension = this.dimension.getCurrentDimension();
-
         if (dimension && dimension.length > 0) {
             var fomula = dimension.split(';');
             var parent = this.parent ? this.parent.dom : this.dom.parentNode;
-
+            
             if (fomula && fomula.length > 0) {
                 var pos = { 'top': 0, 'left': 0 };
                 var size = { 'w': 0, 'h': 0 };
@@ -888,9 +893,11 @@ var gObject = Class.extend("ClassGuiObject", {
                     if (equation.indexOf("h:") >= 0) {
                         equation = equation.replace("h:", "");
                         this.dom.style.height = eval(equation) + 'px';
+
                     } else if (equation.indexOf("w:") >= 0) {
                         equation = equation.replace("w:", "");
                         this.dom.style.width = eval(equation) + 'px';
+
                     } else if (equation.indexOf('x:') >= 0) {
                         equation = equation.replace("x:", "");
                         this.dom.style.left = eval(equation) + 'px';
@@ -923,13 +930,16 @@ var gObject = Class.extend("ClassGuiObject", {
         }
     },
     bindStyle: function(style) {
-        if (this.dom.className.indexOf(' ' + Pure.string.trim(style) + ' ') < 0) {
-            this.dom.className += ' ' + Pure.string.trim(style) + ' ';
+        var class_name = this.dom.className ? this.dom.className.toString() : "";
+        if (class_name.indexOf(' ' + Pure.string.trim(style) + ' ') < 0) {
+            class_name += ' ' + Pure.string.trim(style) + ' ';
+            this.dom.className = class_name;
         }
     },
     unbindStyle: function(style) {
-        if (this.dom.className.indexOf(' ' + Pure.string.trim(style) + ' ') >= 0) {
-            this.dom.className = this.dom.className.replace(Pure.string.trim(style), '').replace('  ', ' ');
+        var class_name = this.dom.className ? this.dom.className.toString() : "";
+        if (class_name.indexOf(' ' + Pure.string.trim(style) + ' ') >= 0) {
+            this.dom.className = class_name.replace(Pure.string.trim(style), '').replace('  ', ' ');
         }
     },
     bindEvent: function(ename, fn) {
@@ -1037,6 +1047,41 @@ var Textarea = gObject.extend("ClassTextarea", {
         this.dom.value = text;
     }
 });
+//MODULE
+if (typeof module !== 'undefined' ) {
+    module.exports = {
+        Pure: Pure ,
+        Class: Class,
+        Callback: Callback,
+        Event: Event,
+        EventHandle: EventHandle,
+        Delegate: Delegate,
+        Task: Task,
+        TaskQueue: TaskQueue,
+        Trigger: Trigger,
+        TriggerManager: TriggerManager,
+        GuiClass: gObject,
+    }
+
+    window.__pure__mod__ = module.exports;
+    
+} else {
+    window.__pure__mod__ = {
+        Pure: Pure,
+        Class: Class,
+        Callback: Callback,
+        Event: Event,
+        EventHandle: EventHandle,
+        Delegate: Delegate,
+        Task: Task,
+        TaskQueue: TaskQueue,
+        Trigger: Trigger,
+        TriggerManager: TriggerManager,
+        GuiClass: gObject
+    }
+}
+
+var __pure__mod__ = window.__pure__mod__;
 
 //RUNTIME
 var __pure__ = window.__pure__ = {
@@ -1050,6 +1095,7 @@ var __pure__ = window.__pure__ = {
     {
         this.TriggerManager.trigger(trigger_name, evt);
     },
+
     triggerFired:function(trigger_name)
     {
         return this.TriggerManager.triggerFired(trigger_name);
@@ -1086,7 +1132,7 @@ else {
     window.__pure__waiting__fn = [];
     window.__pure__waiting__fn.push = function(e) {
         if(typeof e == 'function'){
-            try{
+            try {
                 e();
             }
             catch(ex){
