@@ -1,4 +1,4 @@
-//duy.nguyen
+//duy.nguyen <tapvanvn@gmail.com>
 //Pure ver 1.0
 
 /*<Tlinker>*/
