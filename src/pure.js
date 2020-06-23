@@ -485,6 +485,22 @@ var Pure = {
             }
             return { 'w': width, 'h': height };
         },
+
+        bindStyle: function(dom, style) {
+            var class_name = dom.className ? dom.className.toString() : "";
+            if (class_name.indexOf(' ' + Pure.string.trim(style) + ' ') < 0) {
+                class_name += ' ' + Pure.string.trim(style) + ' ';
+                dom.className = class_name;
+            }
+        },
+
+        unbindStyle: function(dom, style) {
+            var class_name = dom.className ? dom.className.toString() : "";
+            if (class_name.indexOf(' ' + Pure.string.trim(style) + ' ') >= 0) {
+                dom.className = class_name.replace(Pure.string.trim(style), '').replace('  ', ' ');
+            }
+        },
+        
         requestFullScreen: function() {
             var element = document.body;
             if (element.requestFullscreen) {
