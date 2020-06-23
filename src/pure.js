@@ -496,6 +496,24 @@ var Pure = {
             } else if (element.msRequestFullscreen) {
                 element.msRequestFullscreen();
             }
+        },
+
+        runChildren:function(node, fn){
+
+            node.childNodes.forEach((n)=>{
+
+                Pure.dom.run(n, fn)
+            })
+        },
+
+        run: function(node, fn) {
+
+            fn(node);
+
+            node.childNodes.forEach((n)=>{
+                
+                Pure.dom.run(n, fn)
+            })
         }
     },
     array: {
