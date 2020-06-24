@@ -536,7 +536,7 @@ var Pure = {
                 Pure.dom.run(n, fn)
             })
         },
-        
+
         align: function(dom, dimensionn) {
 
             if (dimension && dimension.length > 0) {
@@ -1160,6 +1160,7 @@ if (typeof module !== 'undefined' ) {
         Trigger: Trigger,
         TriggerManager: TriggerManager,
         GuiClass: gObject,
+        Dimension: Dimension,
     }
 
     window.__pure__mod__ = module.exports;
@@ -1176,7 +1177,8 @@ if (typeof module !== 'undefined' ) {
         TaskQueue: TaskQueue,
         Trigger: Trigger,
         TriggerManager: TriggerManager,
-        GuiClass: gObject
+        GuiClass: gObject,
+        Dimension: Dimension,
     }
 }
 
