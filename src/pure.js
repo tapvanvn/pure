@@ -535,7 +535,67 @@ var Pure = {
                 
                 Pure.dom.run(n, fn)
             })
-        }
+        },
+        
+        align: function(dom, dimensionn) {
+
+            if (dimension && dimension.length > 0) {
+                var fomula = dimension.split(';');
+                var parent = dom.parentNode;
+                
+                if (fomula && fomula.length > 0) {
+                    var pos = { 'top': 0, 'left': 0 };
+                    var size = { 'w': 0, 'h': 0 };
+                    if (parent) {
+                        pos = Pure.dom.getPos(parent);
+                        size = Pure.dom.getSize(parent);
+                    }
+                    var browser_size = Pure.browser.getSize();
+                    for (var i = 0; i < fomula.length; i++) {
+                        var equation =
+                            Pure.string.replace(
+                                Pure.string.replace(
+                                    Pure.string.replace(
+                                        Pure.string.replace(
+                                            Pure.string.replace(
+                                                Pure.string.replace(fomula[i], "parent.h", size.h),
+                                                "page.h", browser_size.h
+                                            ),
+                                            "parent.w", size.w
+                                        ),
+                                        "page.w", browser_size.w
+                                    ),
+                                    "parent.x", pos.left
+                                ),
+                                "parent.y", pos.top
+                            );
+                        if (equation.indexOf("h:") >= 0) {
+                            equation = equation.replace("h:", "");
+                            dom.style.height = eval(equation) + 'px';
+    
+                        } else if (equation.indexOf("w:") >= 0) {
+                            equation = equation.replace("w:", "");
+                            dom.style.width = eval(equation) + 'px';
+    
+                        } else if (equation.indexOf('x:') >= 0) {
+                            equation = equation.replace("x:", "");
+                            dom.style.left = eval(equation) + 'px';
+                        } else if (equation.indexOf('y:') >= 0) {
+                            equation = equation.replace("y:", "");
+                            dom.style.top = eval(equation) + 'px';
+                        }
+                    }
+                }
+                //align childrent
+                if (dom.childNodes) {
+                    for (var c = 0; c < dom.childNodes.length; c++) {
+                        if (!Pure.isNull(dom.childNodes[c].gParent)) {
+                            dom.childNodes[c].gParent.align();
+                        }
+                    }
+                }
+            }
+        },
     },
     array: {
         removeItem: function(array) {
