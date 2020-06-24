@@ -537,7 +537,7 @@ var Pure = {
             })
         },
 
-        align: function(dom, dimensionn) {
+        align: function(dom, dimension) {
 
             if (dimension && dimension.length > 0) {
                 var fomula = dimension.split(';');
