@@ -472,6 +472,13 @@ var Pure = {
             var width = 0;
             var height = 0;
 
+            if (typeof element.getBoundingClientRect === 'function'){
+
+                var size = element.getBoundingClientRect()
+                
+                return {w: size.width, h:size.height}
+            }
+
             if (element.clientWidth) {
                 width = element.clientWidth;
                 height = element.clientHeight;
