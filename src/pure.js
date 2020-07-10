@@ -546,9 +546,9 @@ var Pure = {
 
         align: function(dom, dimension) {
 
-            if (dimension && dimension.length > 0) {
+            if (typeof dom !== 'undefined' && dimension && dimension.length > 0) {
                 var fomula = dimension.split(';');
-                var parent = dom.parentNode;
+                var parent = dom.parentNode ? dom.parentNode : null;
                 
                 if (fomula && fomula.length > 0) {
                     var pos = { 'top': 0, 'left': 0 };
