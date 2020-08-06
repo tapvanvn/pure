@@ -937,8 +937,12 @@ var gObject = Class.extend("ClassGuiObject", {
                 this.dimension.addState({ name: dname, dimension: gAttr.dimensions[dname] });
             }
         }
+        if (typeof gAttr.dom !== 'undefined' && gAttr.dom instanceof Element) {
 
-        this.dom = document.createElement(gAttr.dtype);
+            this.dom = gAttr.dom
+        }else {
+            this.dom = document.createElement(gAttr.dtype);
+        }
         Pure.copyAttr(this.dom, gAttr);
 
         this.dom.gParent = this;
