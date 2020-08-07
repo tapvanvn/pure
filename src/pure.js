@@ -455,17 +455,20 @@ var Pure = {
             (document.body) ? document.body.appendChild(element): document.documentElement.appendChild(element);
         },
         getPos: function(element, parent) {
+
             var mleft = element.offsetLeft;
             var mtop = element.offsetTop;
-            if (element.offsetParent) {
-                do {
-                    if (element.offsetParent == parent) {
-                        return { 'left': mleft, 'top': mtop };
-                    }
-                    mleft += element.offsetLeft;
-                    mtop += element.offsetTop;
-                } while (element = element.offsetParent);
-            }
+    
+            while (element = element.offsetParent) {
+
+                if (element == parent) {
+
+                    return { 'left': mleft, 'top': mtop };
+                }
+                mleft += element.offsetLeft;
+                mtop += element.offsetTop;
+            } 
+
             return { 'left': mleft, 'top': mtop };
         },
         getSize: function(element) {
