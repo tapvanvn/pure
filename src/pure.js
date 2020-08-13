@@ -357,18 +357,24 @@ var Pure = {
 
     event: {
         bind: function(ename, dom, fn) {
-            if (dom.addEventListener) {
-                dom.addEventListener(ename, fn, true);
-            } else if (dom.attachEvent) {
-                dom.attachEvent('on' + ename, fn);
-            }
+            var events = ename.split(",")
+            events.forEach( (event_name) =>{
+                if (dom.addEventListener) {
+                    dom.addEventListener(event_name, fn, true);
+                } else if (dom.attachEvent) {
+                    dom.attachEvent('on' + event_name, fn);
+                }
+            })
         },
         unbind: function(ename, dom, fn) {
-            if (dom.removeEventListener) {
-                dom.removeEventListener(ename, fn, true);
-            } else if (dom.detachEvent) {
-                dom.detachEvent('on' + ename, fn);
-            }
+            var events = ename.split(",")
+            events.forEach( (event_name) =>{
+                if (dom.removeEventListener) {
+                    dom.removeEventListener(event_name, fn, true);
+                } else if (dom.detachEvent) {
+                    dom.detachEvent('on' + event_name, fn);
+                }
+            })
         },
         getActor: function(evt) {
             return (evt && evt.target) || (window.event && window.event.srcElement);
