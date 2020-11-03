@@ -264,6 +264,8 @@ var Pure = {
         },
     },
 
+    ClassGallery:{},
+
     extend: function(class_name, feature) {
 
         function child_proto(build) {}
@@ -313,7 +315,21 @@ var Pure = {
             }
         }
         child.extend = Pure.extend;
+
+        if(class_name.length > 0) {
+
+            Pure.ClassGallery[class_name] = child
+        }
         return child;
+    },
+
+    new: function(class_name) {
+
+        if(typeof Pure.ClassGallery[class_name] !== 'undefined') {
+
+            return new Pure.ClassGallery[class_name]
+        }
+        return null
     },
 
     isNull: function(obj) {
