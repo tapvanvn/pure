@@ -264,6 +264,28 @@ var Pure = {
         },
     },
 
+    storage: {
+        _hasStorage: typeof(Storage) !== "undefined",
+        getItem : function(key) 
+        {
+            if(!Pure.storage._hasStorage)
+                return ""
+            return localStorage.getItem(key)
+        },
+        setItem: function(key, value)
+        {
+            if(!Pure.storage._hasStorage)
+                return
+            localStorage.setItem(key, value)
+        },
+        removeItem: function(key)
+        {
+            if(!Pure.storage._hasStorage)
+                return
+            localStorage.removeItem(key)
+        }
+    },
+
     ClassGallery:{},
 
     extend: function(class_name, feature) {
