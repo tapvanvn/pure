@@ -372,7 +372,7 @@ var Pure = {
                     break;
                 }
             }
-        } else {
+        } else if (typeof obj == "object"){
             for (var key in obj) {
                 if (obj.hasOwnProperty(key)) {
                     if (fn.call(obj[key], key, obj[key]) === false) {
@@ -385,8 +385,12 @@ var Pure = {
 
     copyAttr: function(to, attrs) {
         Pure.each(attrs, function(aname, attr) {
-            if (Pure.isArray(aname) && Pure.isArray(attr)) {
-                Pure.each(to[aname], attr);
+            if (Pure.isArray(aname) && Pure.isArray(attr) || typeof attr == "object") {
+                if(typeof to[aname] == "undefined") 
+                {
+                    to[aname] = Pure.isArray(attr) ? [] : {}
+                }
+                Pure.copyAttr(to[aname], attr);
             } else {
                 to[aname] = attr;
             }
